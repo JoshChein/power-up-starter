@@ -1,0 +1,1864 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英语学习应用</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background-color: #FFA500;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background-color: #FFDAB9;
+            border-radius: 50%;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .logo:before {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #FFD700;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+        
+        .logo:after {
+            content: "";
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 2px solid #FFD700;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .unit-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .unit-selector {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .unit-btn {
+            background-color: #FFA500;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .unit-btn:hover {
+            background-color: #FF8C00;
+            transform: translateY(-2px);
+        }
+        
+        .unit-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            color: #FFA500;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+        }
+        
+        .unit-content {
+            display: none;
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #FFF8DC;
+            margin-top: 20px;
+        }
+        
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #FFA500;
+        }
+        
+        .unit-title {
+            font-size: 24px;
+            color: #FF8C00;
+        }
+        
+        .unit-page {
+            font-size: 16px;
+            color: #888;
+        }
+        
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background-color: #FFC04D;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab-btn:first-child {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .tab-btn:last-child {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .tab-btn.active {
+            background-color: #FFA500;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .word-item {
+            background-color: #F0F8FF;
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .word-item:hover {
+            background-color: #B0E0E6;
+            transform: scale(1.05);
+        }
+        
+        .grammar-container {
+            margin-bottom: 20px;
+        }
+        
+        .grammar-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #F0F8FF;
+            border-radius: 5px;
+        }
+        
+        .exercise-container {
+            margin-top: 30px;
+        }
+        
+        .exercise {
+            background-color: #F5F5DC;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .exercise-question {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .exercise-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .exercise-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .fill-blank {
+            padding: 20px;
+            background-color: #EEF8FF;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .fill-blank-sentence {
+            font-size: 18px;
+            margin-bottom: 10px;
+            line-height: 2;
+        }
+        
+        .blank-input {
+            width: 100px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .check-answer-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .unit-container {
+                flex-direction: column;
+            }
+            
+            .tab-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .tab-btn {
+                flex-grow: 1;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo"></div>
+            <h1>英语学习应用</h1>
+        </div>
+        
+        <div class="unit-selector">
+            <button class="unit-btn" onclick="showUnit(0)"><span class="unit-number">0</span>Hello</button>
+            <button class="unit-btn" onclick="showUnit(1)"><span class="unit-number">1</span>Friends and family</button>
+            <button class="unit-btn" onclick="showUnit(2)"><span class="unit-number">2</span>At school</button>
+            <button class="unit-btn" onclick="showUnit(3)"><span class="unit-number">3</span>Food shopping</button>
+            <button class="unit-btn" onclick="showUnit(4)"><span class="unit-number">4</span>At home</button>
+            <button class="unit-btn" onclick="showUnit(5)"><span class="unit-number">5</span>My body</button>
+            <button class="unit-btn" onclick="showUnit(6)"><span class="unit-number">6</span>My toys</button>
+            <button class="unit-btn" onclick="showUnit(7)"><span class="unit-number">7</span>Free time</button>
+            <button class="unit-btn" onclick="showUnit(8)"><span class="unit-number">8</span>We're having fun!</button>
+            <button class="unit-btn" onclick="showUnit(9)"><span class="unit-number">9</span>Moving to the farm</button>
+        </div>
+        
+        <!-- Unit 0: Hello -->
+        <div id="unit0" class="unit-content">
+            <div class="unit-header">
+                <h2 class="unit-title">Hello</h2>
+                <p class="unit-page">Page 4</p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'unit0-vocabulary')">Vocabulary</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit0-language')">Language</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit0-exercises')">Exercises</button>
+                </div>
+                
+                <div id="unit0-vocabulary" class="tab-content active">
+                    <h3>Main scene vocabulary</h3>
+                    <div class="word-list">
+                        <span class="word-item">bird</span>
+                        <span class="word-item">boat</span>
+                        <span class="word-item">book</span>
+                        <span class="word-item">bus</span>
+                        <span class="word-item">cat</span>
+                    </div>
+                    
+                    <h3>Numbers</h3>
+                    <div class="word-list">
+                        <span class="word-item">1</span>
+                        <span class="word-item">2</span>
+                        <span class="word-item">3</span>
+                        <span class="word-item">4</span>
+                        <span class="word-item">5</span>
+                        <span class="word-item">6</span>
+                    </div>
+                    
+                    <h3>Colours</h3>
+                    <div class="word-list">
+                        <span class="word-item">blue</span>
+                        <span class="word-item">green</span>
+                        <span class="word-item">orange</span>
+                        <span class="word-item">purple</span>
+                        <span class="word-item">red</span>
+                        <span class="word-item">yellow</span>
+                    </div>
+                </div>
+                
+                <div id="unit0-language" class="tab-content">
+                    <div class="grammar-container">
+                        <div class="grammar-item">
+                            <p>Hello. I'm [name].</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>What number's this?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>What colour's this?</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="unit0-exercises" class="tab-content">
+                    <div class="exercise-container">
+                        <div class="exercise">
+                            <div class="exercise-question">1. Complete: "Hello, I'm ___."</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="text" id="ex0-1-answer">
+                                    <button onclick="checkAnswer('ex0-1-answer', '[Your name]', 'ex0-1-result')">Check</button>
+                                </div>
+                                <div id="ex0-1-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">2. What number is this? 3</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex0-2" value="three"> three
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex0-2" value="four"> four
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex0-2" value="five"> five
+                                </div>
+                                <button onclick="checkRadioAnswer('ex0-2', 'three', 'ex0-2-result')">Check</button>
+                                <div id="ex0-2-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">3. Match the colors:</div>
+                            <div class="exercise-options">
+                                <select id="ex0-3-1">
+                                    <option value="">Select...</option>
+                                    <option value="red">red</option>
+                                    <option value="blue">blue</option>
+                                    <option value="green">green</option>
+                                </select> 
+                                is the color of the sky
+                                <br>
+                                <select id="ex0-3-2">
+                                    <option value="">Select...</option>
+                                    <option value="red">red</option>
+                                    <option value="blue">blue</option>
+                                    <option value="green">green</option>
+                                </select> 
+                                is the color of grass
+                                <br>
+                                <button onclick="checkColorMatch()">Check</button>
+                                <div id="ex0-3-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="fill-blank">
+                            <h3>Fill in the blanks with the correct word:</h3>
+                            <div class="fill-blank-sentence">
+                                The <input type="text" class="blank-input" id="blank0-1" data-answer="cat"> is on the <input type="text" class="blank-input" id="blank0-2" data-answer="boat">.
+                            </div>
+                            <div class="fill-blank-sentence">
+                                I can see a <input type="text" class="blank-input" id="blank0-3" data-answer="bird"> and a <input type="text" class="blank-input" id="blank0-4" data-answer="book">.
+                            </div>
+                            <button onclick="checkBlanks('blank0-', 4)">Check Answers</button>
+                            <div id="blank0-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unit 1: Friends and family -->
+        <div id="unit1" class="unit-content">
+            <div class="unit-header">
+                <h2 class="unit-title">Friends and family</h2>
+                <p class="unit-page">Page 8</p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'unit1-vocabulary')">Vocabulary</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit1-language')">Language</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit1-exercises')">Exercises</button>
+                </div>
+                
+                <div id="unit1-vocabulary" class="tab-content active">
+                    <h3>Friends and family</h3>
+                    <div class="word-list">
+                        <span class="word-item">man</span>
+                        <span class="word-item">woman</span>
+                        <span class="word-item">boy</span>
+                        <span class="word-item">girl</span>
+                        <span class="word-item">family</span>
+                    </div>
+                    
+                    <h3>More family</h3>
+                    <div class="word-list">
+                        <span class="word-item">mum</span>
+                        <span class="word-item">dad</span>
+                        <span class="word-item">brother</span>
+                        <span class="word-item">sister</span>
+                        <span class="word-item">pet</span>
+                    </div>
+                </div>
+                
+                <div id="unit1-language" class="tab-content">
+                    <div class="grammar-container">
+                        <div class="grammar-item">
+                            <p>What's your name?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>My name's... I'm...</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>How old are you? I'm...</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>He's/She's...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="unit1-exercises" class="tab-content">
+                    <div class="exercise-container">
+                        <div class="exercise">
+                            <div class="exercise-question">1. Complete the dialogue:</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    A: <input type="text" id="ex1-1-answer" placeholder="_____ your name?">
+                                    <br>
+                                    B: My name's John.
+                                    <br>
+                                    <button onclick="checkAnswer('ex1-1-answer', 'What\'s', 'ex1-1-result')">Check</button>
+                                </div>
+                                <div id="ex1-1-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">2. Match family members:</div>
+                            <div class="exercise-options">
+                                <select id="ex1-2-1">
+                                    <option value="">Select...</option>
+                                    <option value="mum">mum</option>
+                                    <option value="dad">dad</option>
+                                    <option value="brother">brother</option>
+                                    <option value="sister">sister</option>
+                                </select> 
+                                - female parent
+                                <br>
+                                <select id="ex1-2-2">
+                                    <option value="">Select...</option>
+                                    <option value="mum">mum</option>
+                                    <option value="dad">dad</option>
+                                    <option value="brother">brother</option>
+                                    <option value="sister">sister</option>
+                                </select> 
+                                - male parent
+                                <br>
+                                <button onclick="checkFamilyMatch()">Check</button>
+                                <div id="ex1-2-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">3. Complete: "I'm ____ years old."</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="number" id="ex1-3-answer" min="1" max="100">
+                                    <button onclick="checkNumberAnswer()">Check</button>
+                                </div>
+                                <div id="ex1-3-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="fill-blank">
+                            <h3>Fill in the blanks with the correct word:</h3>
+                            <div class="fill-blank-sentence">
+                                This is my <input type="text" class="blank-input" id="blank1-1" data-answer="family">. My <input type="text" class="blank-input" id="blank1-2" data-answer="dad"> is tall.
+                            </div>
+                            <div class="fill-blank-sentence">
+                                My <input type="text" class="blank-input" id="blank1-3" data-answer="sister"> is 8 years old. My <input type="text" class="blank-input" id="blank1-4" data-answer="brother"> is 10.
+                            </div>
+                            <button onclick="checkBlanks('blank1-', 4)">Check Answers</button>
+                            <div id="blank1-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unit 2: At school -->
+        <div id="unit2" class="unit-content">
+            <div class="unit-header">
+                <h2 class="unit-title">At school</h2>
+                <p class="unit-page">Page 18</p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'unit2-vocabulary')">Vocabulary</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit2-language')">Language</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit2-exercises')">Exercises</button>
+                </div>
+                
+                <div id="unit2-vocabulary" class="tab-content active">
+                    <h3>School</h3>
+                    <div class="word-list">
+                        <span class="word-item">bag</span>
+                        <span class="word-item">classroom</span>
+                        <span class="word-item">pencil</span>
+                        <span class="word-item">playground</span>
+                        <span class="word-item">teacher</span>
+                    </div>
+                    
+                    <h3>More school</h3>
+                    <div class="word-list">
+                        <span class="word-item">board</span>
+                        <span class="word-item">bookcase</span>
+                        <span class="word-item">chair</span>
+                        <span class="word-item">cupboard</span>
+                        <span class="word-item">table</span>
+                    </div>
+                </div>
+                
+                <div id="unit2-language" class="tab-content">
+                    <div class="grammar-container">
+                        <div class="grammar-item">
+                            <p>What are they? They're...</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>Are they...? Yes. / No.</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>Where's my...? Where is it?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>It's in/on/under...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="unit2-exercises" class="tab-content">
+                    <div class="exercise-container">
+                        <div class="exercise">
+                            <div class="exercise-question">1. Where is the pencil?</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex2-1" value="in"> It's in the bag.
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex2-1" value="on"> It's on the table.
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex2-1" value="under"> It's under the chair.
+                                </div>
+                                <button onclick="checkPositionAnswer()">Check</button>
+                                <div id="ex2-1-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">2. Complete: "_____ are they? They're books."</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="text" id="ex2-2-answer">
+                                    <button onclick="checkAnswer('ex2-2-answer', 'What', 'ex2-2-result')">Check</button>
+                                </div>
+                                <div id="ex2-2-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">3. Are they teachers?</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex2-3" value="yes"> Yes, they are.
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex2-3" value="no"> No, they aren't.
+                                </div>
+                                <button onclick="checkYesNoAnswer()">Check</button>
+                                <div id="ex2-3-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="fill-blank">
+                            <h3>Fill in the blanks with the correct word:</h3>
+                            <div class="fill-blank-sentence">
+                                The <input type="text" class="blank-input" id="blank2-1" data-answer="teacher"> is in the <input type="text" class="blank-input" id="blank2-2" data-answer="classroom">.
+                            </div>
+                            <div class="fill-blank-sentence">
+                                My <input type="text" class="blank-input" id="blank2-3" data-answer="pencil"> is on the <input type="text" class="blank-input" id="blank2-4" data-answer="table">.
+                            </div>
+                            <button onclick="checkBlanks('blank2-', 4)">Check Answers</button>
+                            <div id="blank2-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unit 3: Food shopping -->
+        <div id="unit3" class="unit-content">
+            <div class="unit-header">
+                <h2 class="unit-title">Food shopping</h2>
+                <p class="unit-page">Page 28</p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'unit3-vocabulary')">Vocabulary</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit3-language')">Language</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit3-exercises')">Exercises</button>
+                </div>
+                
+                <div id="unit3-vocabulary" class="tab-content active">
+                    <h3>Food</h3>
+                    <div class="word-list">
+                        <span class="word-item">apple</span>
+                        <span class="word-item">banana</span>
+                        <span class="word-item">grapes</span>
+                        <span class="word-item">orange</span>
+                        <span class="word-item">watermelon</span>
+                    </div>
+                    
+                    <h3>More food</h3>
+                    <div class="word-list">
+                        <span class="word-item">beans</span>
+                        <span class="word-item">burger</span>
+                        <span class="word-item">carrot</span>
+                        <span class="word-item">egg</span>
+                        <span class="word-item">rice</span>
+                    </div>
+                </div>
+                
+                <div id="unit3-language" class="tab-content">
+                    <div class="grammar-container">
+                        <div class="grammar-item">
+                            <p>There's/There are...</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>How many... are there?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>A lot.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="unit3-exercises" class="tab-content">
+                    <div class="exercise-container">
+                        <div class="exercise">
+                            <div class="exercise-question">1. Complete: "_____ are three apples."</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex3-1" value="There"> There
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex3-1" value="There's"> There's
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex3-1" value="They"> They
+                                </div>
+                                <button onclick="checkRadioAnswer('ex3-1', 'There', 'ex3-1-result')">Check</button>
+                                <div id="ex3-1-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">2. Complete: "How many bananas _____ there?"</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="text" id="ex3-2-answer">
+                                    <button onclick="checkAnswer('ex3-2-answer', 'are', 'ex3-2-result')">Check</button>
+                                </div>
+                                <div id="ex3-2-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">3. Match the foods:</div>
+                            <div class="exercise-options">
+                                Orange is <select id="ex3-3-1">
+                                    <option value="">Select...</option>
+                                    <option value="red">red</option>
+                                    <option value="orange">orange</option>
+                                    <option value="yellow">yellow</option>
+                                </select>
+                                <br>
+                                Banana is <select id="ex3-3-2">
+                                    <option value="">Select...</option>
+                                    <option value="red">red</option>
+                                    <option value="orange">orange</option>
+                                    <option value="yellow">yellow</option>
+                                </select>
+                                <br>
+                                <button onclick="checkFruitColors()">Check</button>
+                                <div id="ex3-3-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="fill-blank">
+                            <h3>Fill in the blanks with the correct word:</h3>
+                            <div class="fill-blank-sentence">
+                                There are three <input type="text" class="blank-input" id="blank3-1" data-answer="apples"> and two <input type="text" class="blank-input" id="blank3-2" data-answer="bananas">.
+                            </div>
+                            <div class="fill-blank-sentence">
+                                I like <input type="text" class="blank-input" id="blank3-3" data-answer="grapes"> and <input type="text" class="blank-input" id="blank3-4" data-answer="watermelon">.
+                            </div>
+                            <button onclick="checkBlanks('blank3-', 4)">Check Answers</button>
+                            <div id="blank3-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unit 4: At home -->
+        <div id="unit4" class="unit-content">
+            <div class="unit-header">
+                <h2 class="unit-title">At home</h2>
+                <p class="unit-page">Page 40</p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'unit4-vocabulary')">Vocabulary</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit4-language')">Language</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit4-exercises')">Exercises</button>
+                </div>
+                
+                <div id="unit4-vocabulary" class="tab-content active">
+                    <h3>Home</h3>
+                    <div class="word-list">
+                        <span class="word-item">bed</span>
+                        <span class="word-item">clock</span>
+                        <span class="word-item">computer</span>
+                        <span class="word-item">lamp</span>
+                        <span class="word-item">mirror</span>
+                    </div>
+                    
+                    <h3>Rooms</h3>
+                    <div class="word-list">
+                        <span class="word-item">bathroom</span>
+                        <span class="word-item">bedroom</span>
+                        <span class="word-item">garden</span>
+                        <span class="word-item">kitchen</span>
+                        <span class="word-item">living room</span>
+                    </div>
+                </div>
+                
+                <div id="unit4-language" class="tab-content">
+                    <div class="grammar-container">
+                        <div class="grammar-item">
+                            <p>I've/You've got...</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>Have you got...?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>Yes, I have. / No, I haven't.</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>I/We/They haven't got...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="unit4-exercises" class="tab-content">
+                    <div class="exercise-container">
+                        <div class="exercise">
+                            <div class="exercise-question">1. Complete: "I've got a _____."</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex4-1" value="bed"> bed
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex4-1" value="computer"> computer
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex4-1" value="clock"> clock
+                                </div>
+                                <button onclick="checkHomeItemAnswer()">Check</button>
+                                <div id="ex4-1-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">2. Complete the question:</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="text" id="ex4-2-answer" placeholder="_____ you got a lamp?">
+                                    <button onclick="checkAnswer('ex4-2-answer', 'Have', 'ex4-2-result')">Check</button>
+                                </div>
+                                <div id="ex4-2-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">3. Match the rooms:</div>
+                            <div class="exercise-options">
+                                We cook in the <select id="ex4-3-1">
+                                    <option value="">Select...</option>
+                                    <option value="bathroom">bathroom</option>
+                                    <option value="bedroom">bedroom</option>
+                                    <option value="kitchen">kitchen</option>
+                                </select>
+                                <br>
+                                We sleep in the <select id="ex4-3-2">
+                                    <option value="">Select...</option>
+                                    <option value="bathroom">bathroom</option>
+                                    <option value="bedroom">bedroom</option>
+                                    <option value="kitchen">kitchen</option>
+                                </select>
+                                <br>
+                                <button onclick="checkRoomMatch()">Check</button>
+                                <div id="ex4-3-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="fill-blank">
+                            <h3>Fill in the blanks with the correct word:</h3>
+                            <div class="fill-blank-sentence">
+                                I've got a <input type="text" class="blank-input" id="blank4-1" data-answer="computer"> in my <input type="text" class="blank-input" id="blank4-2" data-answer="bedroom">.
+                            </div>
+                            <div class="fill-blank-sentence">
+                                The <input type="text" class="blank-input" id="blank4-3" data-answer="clock"> is in the <input type="text" class="blank-input" id="blank4-4" data-answer="living room">.
+                            </div>
+                            <button onclick="checkBlanks('blank4-', 4)">Check Answers</button>
+                            <div id="blank4-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unit 5: My body -->
+        <div id="unit5" class="unit-content">
+            <div class="unit-header">
+                <h2 class="unit-title">My body</h2>
+                <p class="unit-page">Page 50</p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'unit5-vocabulary')">Vocabulary</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit5-language')">Language</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit5-exercises')">Exercises</button>
+                </div>
+                
+                <div id="unit5-vocabulary" class="tab-content active">
+                    <h3>Body</h3>
+                    <div class="word-list">
+                        <span class="word-item">ears</span>
+                        <span class="word-item">eyes</span>
+                        <span class="word-item">hair</span>
+                        <span class="word-item">mouth</span>
+                        <span class="word-item">legs</span>
+                    </div>
+                    
+                    <h3>Describing appearance</h3>
+                    <div class="word-list">
+                        <span class="word-item">big</span>
+                        <span class="word-item">small</span>
+                        <span class="word-item">long</span>
+                        <span class="word-item">short</span>
+                        <span class="word-item">beautiful</span>
+                    </div>
+                </div>
+                
+                <div id="unit5-language" class="tab-content">
+                    <div class="grammar-container">
+                        <div class="grammar-item">
+                            <p>He's/She's got...</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>Has he/she got...?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>Yes, he/she's got...</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>He/She hasn't got...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="unit5-exercises" class="tab-content">
+                    <div class="exercise-container">
+                        <div class="exercise">
+                            <div class="exercise-question">1. Complete: "She's got _____ hair."</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex5-1" value="long"> long
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex5-1" value="short"> short
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex5-1" value="big"> big
+                                </div>
+                                <button onclick="checkRadioAnswer('ex5-1', 'long', 'ex5-1-result')">Check</button>
+                                <div id="ex5-1-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">2. Complete the question:</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="text" id="ex5-2-answer" placeholder="_____ he got blue eyes?">
+                                    <button onclick="checkAnswer('ex5-2-answer', 'Has', 'ex5-2-result')">Check</button>
+                                </div>
+                                <div id="ex5-2-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">3. Match the body parts:</div>
+                            <div class="exercise-options">
+                                We hear with our <select id="ex5-3-1">
+                                    <option value="">Select...</option>
+                                    <option value="ears">ears</option>
+                                    <option value="eyes">eyes</option>
+                                    <option value="mouth">mouth</option>
+                                </select>
+                                <br>
+                                We see with our <select id="ex5-3-2">
+                                    <option value="">Select...</option>
+                                    <option value="ears">ears</option>
+                                    <option value="eyes">eyes</option>
+                                    <option value="mouth">mouth</option>
+                                </select>
+                                <br>
+                                <button onclick="checkBodyPartMatch()">Check</button>
+                                <div id="ex5-3-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="fill-blank">
+                            <h3>Fill in the blanks with the correct word:</h3>
+                            <div class="fill-blank-sentence">
+                                She's got <input type="text" class="blank-input" id="blank5-1" data-answer="big"> <input type="text" class="blank-input" id="blank5-2" data-answer="eyes">.
+                            </div>
+                            <div class="fill-blank-sentence">
+                                He's got <input type="text" class="blank-input" id="blank5-3" data-answer="short"> <input type="text" class="blank-input" id="blank5-4" data-answer="hair">.
+                            </div>
+                            <button onclick="checkBlanks('blank5-', 4)">Check Answers</button>
+                            <div id="blank5-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unit 6: My toys -->
+        <div id="unit6" class="unit-content">
+            <div class="unit-header">
+                <h2 class="unit-title">My toys</h2>
+                <p class="unit-page">Page 60</p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'unit6-vocabulary')">Vocabulary</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit6-language')">Language</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit6-exercises')">Exercises</button>
+                </div>
+                
+                <div id="unit6-vocabulary" class="tab-content active">
+                    <h3>Toys</h3>
+                    <div class="word-list">
+                        <span class="word-item">board game</span>
+                        <span class="word-item">camera</span>
+                        <span class="word-item">doll</span>
+                        <span class="word-item">teddy</span>
+                        <span class="word-item">train</span>
+                    </div>
+                    
+                    <h3>More toys</h3>
+                    <div class="word-list">
+                        <span class="word-item">ball</span>
+                        <span class="word-item">balloon</span>
+                        <span class="word-item">bike</span>
+                        <span class="word-item">car</span>
+                        <span class="word-item">plane</span>
+                    </div>
+                </div>
+                
+                <div id="unit6-language" class="tab-content">
+                    <div class="grammar-container">
+                        <div class="grammar-item">
+                            <p>Do you like...?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>I like/love...</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>What's your favourite...?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>I like/don't like...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="unit6-exercises" class="tab-content">
+                    <div class="exercise-container">
+                        <div class="exercise">
+                            <div class="exercise-question">1. Complete: "Do you like _____?"</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex6-1" value="dolls"> dolls
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex6-1" value="cars"> cars
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex6-1" value="trains"> trains
+                                </div>
+                                <button onclick="checkToyAnswer()">Check</button>
+                                <div id="ex6-1-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">2. Complete the question:</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="text" id="ex6-2-answer" placeholder="What's your _____ toy?">
+                                    <button onclick="checkAnswer('ex6-2-answer', 'favourite', 'ex6-2-result')">Check</button>
+                                </div>
+                                <div id="ex6-2-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">3. Choose like or don't like:</div>
+                            <div class="exercise-options">
+                                I <select id="ex6-3-1">
+                                    <option value="">Select...</option>
+                                    <option value="like">like</option>
+                                    <option value="don't like">don't like</option>
+                                </select> playing with dolls.
+                                <br>
+                                I <select id="ex6-3-2">
+                                    <option value="">Select...</option>
+                                    <option value="like">like</option>
+                                    <option value="don't like">don't like</option>
+                                </select> playing board games.
+                                <br>
+                                <button onclick="checkLikesAnswer()">Check</button>
+                                <div id="ex6-3-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="fill-blank">
+                            <h3>Fill in the blanks with the correct word:</h3>
+                            <div class="fill-blank-sentence">
+                                I love my <input type="text" class="blank-input" id="blank6-1" data-answer="teddy"> and my <input type="text" class="blank-input" id="blank6-2" data-answer="doll">.
+                            </div>
+                            <div class="fill-blank-sentence">
+                                My favourite toy is a <input type="text" class="blank-input" id="blank6-3" data-answer="car">. I don't like the <input type="text" class="blank-input" id="blank6-4" data-answer="board game">.
+                            </div>
+                            <button onclick="checkBlanks('blank6-', 4)">Check Answers</button>
+                            <div id="blank6-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unit 7: Free time -->
+        <div id="unit7" class="unit-content">
+            <div class="unit-header">
+                <h2 class="unit-title">Free time</h2>
+                <p class="unit-page">Page 72</p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'unit7-vocabulary')">Vocabulary</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit7-language')">Language</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit7-exercises')">Exercises</button>
+                </div>
+                
+                <div id="unit7-vocabulary" class="tab-content active">
+                    <h3>Action verbs</h3>
+                    <div class="word-list">
+                        <span class="word-item">climb</span>
+                        <span class="word-item">jump</span>
+                        <span class="word-item">run</span>
+                        <span class="word-item">swim</span>
+                        <span class="word-item">walk</span>
+                    </div>
+                    
+                    <h3>Free time activities</h3>
+                    <div class="word-list">
+                        <span class="word-item">catch a ball</span>
+                        <span class="word-item">fly a plane</span>
+                        <span class="word-item">play basketball</span>
+                        <span class="word-item">play football</span>
+                        <span class="word-item">play the piano</span>
+                    </div>
+                </div>
+                
+                <div id="unit7-language" class="tab-content">
+                    <div class="grammar-container">
+                        <div class="grammar-item">
+                            <p>Can you...?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>Yes, I can. / No, I can't.</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>I can...</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>What are you doing? I'm...ing.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="unit7-exercises" class="tab-content">
+                    <div class="exercise-container">
+                        <div class="exercise">
+                            <div class="exercise-question">1. Complete: "Can you _____?"</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex7-1" value="swim"> swim
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex7-1" value="run"> run
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex7-1" value="jump"> jump
+                                </div>
+                                <button onclick="checkActionAnswer()">Check</button>
+                                <div id="ex7-1-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">2. Complete the answer:</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    Can you climb? <input type="text" id="ex7-2-answer" placeholder="Yes, I ___.">
+                                    <button onclick="checkAnswer('ex7-2-answer', 'can', 'ex7-2-result')">Check</button>
+                                </div>
+                                <div id="ex7-2-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">3. Complete with -ing form:</div>
+                            <div class="exercise-options">
+                                I'm <select id="ex7-3-1">
+                                    <option value="">Select...</option>
+                                    <option value="running">running</option>
+                                    <option value="climbing">climbing</option>
+                                    <option value="jumping">jumping</option>
+                                </select> fast.
+                                <br>
+                                He's <select id="ex7-3-2">
+                                    <option value="">Select...</option>
+                                    <option value="swimming">swimming</option>
+                                    <option value="walking">walking</option>
+                                    <option value="playing">playing</option>
+                                </select> in the pool.
+                                <br>
+                                <button onclick="checkIngFormsAnswer()">Check</button>
+                                <div id="ex7-3-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="fill-blank">
+                            <h3>Fill in the blanks with the correct word:</h3>
+                            <div class="fill-blank-sentence">
+                                I can <input type="text" class="blank-input" id="blank7-1" data-answer="swim"> and <input type="text" class="blank-input" id="blank7-2" data-answer="run">.
+                            </div>
+                            <div class="fill-blank-sentence">
+                                She's <input type="text" class="blank-input" id="blank7-3" data-answer="playing"> the <input type="text" class="blank-input" id="blank7-4" data-answer="piano">.
+                            </div>
+                            <button onclick="checkBlanks('blank7-', 4)">Check Answers</button>
+                            <div id="blank7-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unit 8: We're having fun! -->
+        <div id="unit8" class="unit-content">
+            <div class="unit-header">
+                <h2 class="unit-title">We're having fun!</h2>
+                <p class="unit-page">Page 82</p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'unit8-vocabulary')">Vocabulary</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit8-language')">Language</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit8-exercises')">Exercises</button>
+                </div>
+                
+                <div id="unit8-vocabulary" class="tab-content active">
+                    <h3>More action verbs</h3>
+                    <div class="word-list">
+                        <span class="word-item">clean</span>
+                        <span class="word-item">drink</span>
+                        <span class="word-item">eat</span>
+                        <span class="word-item">sleep</span>
+                        <span class="word-item">take a photo</span>
+                    </div>
+                    
+                    <h3>Nature</h3>
+                    <div class="word-list">
+                        <span class="word-item">beach</span>
+                        <span class="word-item">flower</span>
+                        <span class="word-item">sea</span>
+                        <span class="word-item">sun</span>
+                        <span class="word-item">tree</span>
+                    </div>
+                </div>
+                
+                <div id="unit8-language" class="tab-content">
+                    <div class="grammar-container">
+                        <div class="grammar-item">
+                            <p>I'm...ing.</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>What's he/she...ing? What are you/they...ing?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>He's/She's...ing. They're...ing.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="unit8-exercises" class="tab-content">
+                    <div class="exercise-container">
+                        <div class="exercise">
+                            <div class="exercise-question">1. Complete: "He's _____ a sandwich."</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex8-1" value="eating"> eating
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex8-1" value="drinking"> drinking
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex8-1" value="cleaning"> cleaning
+                                </div>
+                                <button onclick="checkRadioAnswer('ex8-1', 'eating', 'ex8-1-result')">Check</button>
+                                <div id="ex8-1-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">2. Complete the question:</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="text" id="ex8-2-answer" placeholder="_____ is she doing?">
+                                    <button onclick="checkAnswer('ex8-2-answer', 'What', 'ex8-2-result')">Check</button>
+                                </div>
+                                <div id="ex8-2-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">3. Match the nature words:</div>
+                            <div class="exercise-options">
+                                We swim in the <select id="ex8-3-1">
+                                    <option value="">Select...</option>
+                                    <option value="sea">sea</option>
+                                    <option value="tree">tree</option>
+                                    <option value="sun">sun</option>
+                                </select>
+                                <br>
+                                Birds sit in the <select id="ex8-3-2">
+                                    <option value="">Select...</option>
+                                    <option value="sea">sea</option>
+                                    <option value="tree">tree</option>
+                                    <option value="sun">sun</option>
+                                </select>
+                                <br>
+                                <button onclick="checkNatureMatch()">Check</button>
+                                <div id="ex8-3-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="fill-blank">
+                            <h3>Fill in the blanks with the correct word:</h3>
+                            <div class="fill-blank-sentence">
+                                She's <input type="text" class="blank-input" id="blank8-1" data-answer="taking"> a <input type="text" class="blank-input" id="blank8-2" data-answer="photo">.
+                            </div>
+                            <div class="fill-blank-sentence">
+                                They're at the <input type="text" class="blank-input" id="blank8-3" data-answer="beach">. The <input type="text" class="blank-input" id="blank8-4" data-answer="sun"> is shining.
+                            </div>
+                            <button onclick="checkBlanks('blank8-', 4)">Check Answers</button>
+                            <div id="blank8-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unit 9: Moving to the farm -->
+        <div id="unit9" class="unit-content">
+            <div class="unit-header">
+                <h2 class="unit-title">Moving to the farm</h2>
+                <p class="unit-page">Page 92</p>
+            </div>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'unit9-vocabulary')">Vocabulary</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit9-language')">Language</button>
+                    <button class="tab-btn" onclick="openTab(event, 'unit9-exercises')">Exercises</button>
+                </div>
+                
+                <div id="unit9-vocabulary" class="tab-content active">
+                    <h3>Clothes</h3>
+                    <div class="word-list">
+                        <span class="word-item">jacket</span>
+                        <span class="word-item">jeans</span>
+                        <span class="word-item">shoes</span>
+                        <span class="word-item">socks</span>
+                        <span class="word-item">t-shirt</span>
+                    </div>
+                    
+                    <h3>Farm animals</h3>
+                    <div class="word-list">
+                        <span class="word-item">dog</span>
+                        <span class="word-item">duck</span>
+                        <span class="word-item">goat</span>
+                        <span class="word-item">horse</span>
+                        <span class="word-item">sheep</span>
+                    </div>
+                </div>
+                
+                <div id="unit9-language" class="tab-content">
+                    <div class="grammar-container">
+                        <div class="grammar-item">
+                            <p>I want/don't want...</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>Do you want (your)...?</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>Yes, I do. / No, I don't.</p>
+                        </div>
+                        <div class="grammar-item">
+                            <p>Let's... Yes, OK/great/please. No, thank you.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="unit9-exercises" class="tab-content">
+                    <div class="exercise-container">
+                        <div class="exercise">
+                            <div class="exercise-question">1. Complete: "I want my _____."</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex9-1" value="jacket"> jacket
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex9-1" value="shoes"> shoes
+                                </div>
+                                <div class="exercise-option">
+                                    <input type="radio" name="ex9-1" value="t-shirt"> t-shirt
+                                </div>
+                                <button onclick="checkClothesAnswer()">Check</button>
+                                <div id="ex9-1-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">2. Complete the question:</div>
+                            <div class="exercise-options">
+                                <div class="exercise-option">
+                                    <input type="text" id="ex9-2-answer" placeholder="_____ you want your jacket?">
+                                    <button onclick="checkAnswer('ex9-2-answer', 'Do', 'ex9-2-result')">Check</button>
+                                </div>
+                                <div id="ex9-2-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="exercise">
+                            <div class="exercise-question">3. Match the farm animals:</div>
+                            <div class="exercise-options">
+                                <select id="ex9-3-1">
+                                    <option value="">Select...</option>
+                                    <option value="dog">dog</option>
+                                    <option value="horse">horse</option>
+                                    <option value="sheep">sheep</option>
+                                </select> 
+                                says "woof"
+                                <br>
+                                <select id="ex9-3-2">
+                                    <option value="">Select...</option>
+                                    <option value="dog">dog</option>
+                                    <option value="horse">horse</option>
+                                    <option value="sheep">sheep</option>
+                                </select> 
+                                gives us wool
+                                <br>
+                                <button onclick="checkAnimalMatch()">Check</button>
+                                <div id="ex9-3-result"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="fill-blank">
+                            <h3>Fill in the blanks with the correct word:</h3>
+                            <div class="fill-blank-sentence">
+                                I want my <input type="text" class="blank-input" id="blank9-1" data-answer="jeans"> and <input type="text" class="blank-input" id="blank9-2" data-answer="t-shirt">.
+                            </div>
+                            <div class="fill-blank-sentence">
+                                Let's feed the <input type="text" class="blank-input" id="blank9-3" data-answer="horse"> and the <input type="text" class="blank-input" id="blank9-4" data-answer="duck">.
+                            </div>
+                            <button onclick="checkBlanks('blank9-', 4)">Check Answers</button>
+                            <div id="blank9-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        // Show a specific unit
+        function showUnit(unit) {
+            // Hide all units
+            var units = document.querySelectorAll('.unit-content');
+            for (var i = 0; i < units.length; i++) {
+                units[i].style.display = 'none';
+            }
+            
+            // Show selected unit
+            document.getElementById('unit' + unit).style.display = 'block';
+            
+            // Scroll to unit
+            document.getElementById('unit' + unit).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+        
+        // Open tab
+        function openTab(evt, tabId) {
+            // Get parent div of the tab button
+            var parentDiv = evt.currentTarget.parentNode.parentNode;
+            
+            // Hide all tab contents within this parent
+            var tabContents = parentDiv.querySelectorAll('.tab-content');
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remove active class from tab buttons within this parent
+            var tabButtons = parentDiv.querySelectorAll('.tab-btn');
+            for (var i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            
+            // Show selected tab content and set button as active
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+        
+        // Check text answer
+        function checkAnswer(inputId, correctAnswer, resultId) {
+            var userAnswer = document.getElementById(inputId).value;
+            var resultElement = document.getElementById(resultId);
+            
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                resultElement.innerHTML = '✓ Correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Try again. The correct answer is: ' + correctAnswer;
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check radio answer
+        function checkRadioAnswer(name, correctAnswer, resultId) {
+            var selectedOption = document.querySelector('input[name="' + name + '"]:checked');
+            var resultElement = document.getElementById(resultId);
+            
+            if (!selectedOption) {
+                resultElement.innerHTML = 'Please select an answer.';
+                resultElement.style.color = 'blue';
+                return;
+            }
+            
+            if (selectedOption.value === correctAnswer) {
+                resultElement.innerHTML = '✓ Correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Try again. The correct answer is: ' + correctAnswer;
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check color match
+        function checkColorMatch() {
+            var sky = document.getElementById('ex0-3-1').value;
+            var grass = document.getElementById('ex0-3-2').value;
+            var resultElement = document.getElementById('ex0-3-result');
+            
+            if (sky === 'blue' && grass === 'green') {
+                resultElement.innerHTML = '✓ Correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Try again. Sky should be blue and grass should be green.';
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check family match
+        function checkFamilyMatch() {
+            var female = document.getElementById('ex1-2-1').value;
+            var male = document.getElementById('ex1-2-2').value;
+            var resultElement = document.getElementById('ex1-2-result');
+            
+            if (female === 'mum' && male === 'dad') {
+                resultElement.innerHTML = '✓ Correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Try again. Female parent is mum and male parent is dad.';
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check number answer
+        function checkNumberAnswer() {
+            var age = document.getElementById('ex1-3-answer').value;
+            var resultElement = document.getElementById('ex1-3-result');
+            
+            if (age > 0 && age <= 100) {
+                resultElement.innerHTML = '✓ Correct! "I\'m ' + age + ' years old."';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Please enter a valid age (1-100).';
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check position answer (in/on/under)
+        function checkPositionAnswer() {
+            var selectedOption = document.querySelector('input[name="ex2-1"]:checked');
+            var resultElement = document.getElementById('ex2-1-result');
+            
+            if (!selectedOption) {
+                resultElement.innerHTML = 'Please select an answer.';
+                resultElement.style.color = 'blue';
+                return;
+            }
+            
+            resultElement.innerHTML = '✓ Correct! "It\'s ' + selectedOption.value + ' the ' + 
+                                      (selectedOption.value === 'in' ? 'bag' : 
+                                       selectedOption.value === 'on' ? 'table' : 'chair') + '."';
+            resultElement.style.color = 'green';
+        }
+        
+        // Check yes/no answer
+        function checkYesNoAnswer() {
+            var selectedOption = document.querySelector('input[name="ex2-3"]:checked');
+            var resultElement = document.getElementById('ex2-3-result');
+            
+            if (!selectedOption) {
+                resultElement.innerHTML = 'Please select an answer.';
+                resultElement.style.color = 'blue';
+                return;
+            }
+            
+            resultElement.innerHTML = '✓ Your answer: ' + 
+                                     (selectedOption.value === 'yes' ? 'Yes, they are.' : 'No, they aren\'t.');
+            resultElement.style.color = 'green';
+        }
+        
+        // Check fruit colors match
+        function checkFruitColors() {
+            var orange = document.getElementById('ex3-3-1').value;
+            var banana = document.getElementById('ex3-3-2').value;
+            var resultElement = document.getElementById('ex3-3-result');
+            
+            if (orange === 'orange' && banana === 'yellow') {
+                resultElement.innerHTML = '✓ Correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Try again. Orange is orange and banana is yellow.';
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check home item answer
+        function checkHomeItemAnswer() {
+            var selectedOption = document.querySelector('input[name="ex4-1"]:checked');
+            var resultElement = document.getElementById('ex4-1-result');
+            
+            if (!selectedOption) {
+                resultElement.innerHTML = 'Please select an answer.';
+                resultElement.style.color = 'blue';
+                return;
+            }
+            
+            resultElement.innerHTML = '✓ Correct! "I\'ve got a ' + selectedOption.value + '."';
+            resultElement.style.color = 'green';
+        }
+        
+        // Check room match
+        function checkRoomMatch() {
+            var kitchen = document.getElementById('ex4-3-1').value;
+            var bedroom = document.getElementById('ex4-3-2').value;
+            var resultElement = document.getElementById('ex4-3-result');
+            
+            if (kitchen === 'kitchen' && bedroom === 'bedroom') {
+                resultElement.innerHTML = '✓ Correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Try again. We cook in the kitchen and sleep in the bedroom.';
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check body part match
+        function checkBodyPartMatch() {
+            var hear = document.getElementById('ex5-3-1').value;
+            var see = document.getElementById('ex5-3-2').value;
+            var resultElement = document.getElementById('ex5-3-result');
+            
+            if (hear === 'ears' && see === 'eyes') {
+                resultElement.innerHTML = '✓ Correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Try again. We hear with our ears and see with our eyes.';
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check toy answer
+        function checkToyAnswer() {
+            var selectedOption = document.querySelector('input[name="ex6-1"]:checked');
+            var resultElement = document.getElementById('ex6-1-result');
+            
+            if (!selectedOption) {
+                resultElement.innerHTML = 'Please select an answer.';
+                resultElement.style.color = 'blue';
+                return;
+            }
+            
+            resultElement.innerHTML = '✓ Correct! "Do you like ' + selectedOption.value + '?"';
+            resultElement.style.color = 'green';
+        }
+        
+        // Check likes answer
+        function checkLikesAnswer() {
+            var dolls = document.getElementById('ex6-3-1').value;
+            var boardGames = document.getElementById('ex6-3-2').value;
+            var resultElement = document.getElementById('ex6-3-result');
+            
+            if (dolls && boardGames) {
+                resultElement.innerHTML = '✓ Your preferences are noted!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = 'Please select for both options.';
+                resultElement.style.color = 'blue';
+            }
+        }
+        
+        // Check action answer
+        function checkActionAnswer() {
+            var selectedOption = document.querySelector('input[name="ex7-1"]:checked');
+            var resultElement = document.getElementById('ex7-1-result');
+            
+            if (!selectedOption) {
+                resultElement.innerHTML = 'Please select an answer.';
+                resultElement.style.color = 'blue';
+                return;
+            }
+            
+            resultElement.innerHTML = '✓ Correct! "Can you ' + selectedOption.value + '?"';
+            resultElement.style.color = 'green';
+        }
+        
+        // Check -ing forms answer
+        function checkIngFormsAnswer() {
+            var running = document.getElementById('ex7-3-1').value;
+            var swimming = document.getElementById('ex7-3-2').value;
+            var resultElement = document.getElementById('ex7-3-result');
+            
+            if (running === 'running' && swimming === 'swimming') {
+                resultElement.innerHTML = '✓ Correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Try again. "I\'m running fast. He\'s swimming in the pool."';
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check nature match
+        function checkNatureMatch() {
+            var swim = document.getElementById('ex8-3-1').value;
+            var birds = document.getElementById('ex8-3-2').value;
+            var resultElement = document.getElementById('ex8-3-result');
+            
+            if (swim === 'sea' && birds === 'tree') {
+                resultElement.innerHTML = '✓ Correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Try again. We swim in the sea and birds sit in the tree.';
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check clothes answer
+        function checkClothesAnswer() {
+            var selectedOption = document.querySelector('input[name="ex9-1"]:checked');
+            var resultElement = document.getElementById('ex9-1-result');
+            
+            if (!selectedOption) {
+                resultElement.innerHTML = 'Please select an answer.';
+                resultElement.style.color = 'blue';
+                return;
+            }
+            
+            resultElement.innerHTML = '✓ Correct! "I want my ' + selectedOption.value + '."';
+            resultElement.style.color = 'green';
+        }
+        
+        // Check animal match
+        function checkAnimalMatch() {
+            var dog = document.getElementById('ex9-3-1').value;
+            var sheep = document.getElementById('ex9-3-2').value;
+            var resultElement = document.getElementById('ex9-3-result');
+            
+            if (dog === 'dog' && sheep === 'sheep') {
+                resultElement.innerHTML = '✓ Correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Try again. Dog says "woof" and sheep gives us wool.';
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Check blanks
+        function checkBlanks(prefix, count) {
+            var allCorrect = true;
+            var resultHtml = '';
+            
+            for (var i = 1; i <= count; i++) {
+                var inputElement = document.getElementById(prefix + i);
+                var userAnswer = inputElement.value.trim().toLowerCase();
+                var correctAnswer = inputElement.getAttribute('data-answer').toLowerCase();
+                
+                if (userAnswer === correctAnswer) {
+                    inputElement.style.backgroundColor = '#e6ffe6';
+                    inputElement.style.borderColor = 'green';
+                } else {
+                    allCorrect = false;
+                    inputElement.style.backgroundColor = '#ffe6e6';
+                    inputElement.style.borderColor = 'red';
+                    resultHtml += 'Blank ' + i + ': should be "' + correctAnswer + '"<br>';
+                }
+            }
+            
+            var resultElement = document.getElementById(prefix + 'result');
+            if (allCorrect) {
+                resultElement.innerHTML = '✓ All answers are correct!';
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.innerHTML = '✗ Some answers need correction:<br>' + resultHtml;
+                resultElement.style.color = 'red';
+            }
+        }
+        
+        // Default to showing the Hello unit on page load
+        window.onload = function() {
+            showUnit(0);
+        };
+    </script>
+
+
+</body></html>
